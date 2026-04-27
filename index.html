@@ -51,20 +51,19 @@
     box-sizing: border-box;
   }
   
-  /* সার্চ বক্স বড় করা হয়েছে */
   #searchBox {
     flex-grow: 1;
-    padding: 16px; /* প্যাডিং বাড়ানো হয়েছে */
+    padding: 16px; 
     border-radius: 10px;
     border: none;
-    font-size: 18px; /* ফন্ট বড় করা হয়েছে */
+    font-size: 18px; 
     font-weight: bold;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     outline: none;
     width: 100%;
   }
 
-  /* টগল সুইচ একটু বড় করা হয়েছে */
+  /* টগল সুইচ */
   .toggle-container {
     display: flex;
     align-items: center;
@@ -150,7 +149,7 @@
     to { transform: translateX(0); opacity: 1; }
   }
 
-  /* ইমেজের সাইজ ইউটিউব থাম্বনেইলের মতো (16:9) এবং স্ট্রেচ (fill) */
+  /* ইমেজের সাইজ ইউটিউব থাম্বনেইলের মতো (16:9) */
   .movie-poster {
     width: 100%;
     aspect-ratio: 16 / 9; 
@@ -159,16 +158,15 @@
     background: #e0e0e0;
   }
 
-  /* টাইটেল বড় করা হয়েছে */
   .movie-title {
-    font-size: 1.7em; /* ফন্ট আরও বড় করা হয়েছে */
+    font-size: 1.7em; 
     margin: 18px 0;
     text-align: center;
     font-weight: 800;
     line-height: 1.3;
   }
 
-  /* বাটনগুলো বড় করা হয়েছে */
+  /* বাটনগুলো */
   .movie-buttons {
     display: flex;
     flex-direction: row;
@@ -180,12 +178,12 @@
   .movie-buttons a {
     flex: 1;
     text-align: center;
-    padding: 16px 8px; /* বাটন প্যাডিং বাড়ানো হয়েছে */
+    padding: 16px 8px; 
     border-radius: 12px;
     color: var(--btn-text);
     text-decoration: none;
     font-weight: bold;
-    font-size: 18px; /* বাটন ফন্ট বড় করা হয়েছে */
+    font-size: 18px; 
     transition: opacity 0.2s, transform 0.1s;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   }
@@ -196,15 +194,23 @@
   .btn-watch { background-color: #e50914; }
   .btn-download { background-color: #4caf50; }
 
+  /* লোডিং লেবেলের ডিজাইন */
   #status-message {
     text-align: center;
     color: white;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 22px;
     margin-top: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: inline-block;
+    backdrop-filter: blur(5px);
+  }
+  .status-container {
+    text-align: center;
   }
 
-  /* ছোট স্ক্রিনের জন্য ফন্ট যেন খুব ছোট না হয় তার ব্যবস্থা */
   @media (max-width: 380px) {
     .movie-buttons { gap: 10px; }
     .movie-buttons a { font-size: 16px; padding: 14px 4px; }
@@ -225,8 +231,10 @@
   </div>
 </div>
 
+<div class="status-container">
+  <div id="status-message">Loading...</div>
+</div>
 <div id="movie-container" class="movie-container"></div>
-<div id="status-message">লোড হচ্ছে...</div>
 
 <script>
   const sheetId = '1XKI9EmngzuXG29RDT4KuyuB2oNi6Nob3GNFfERYS3Wk';
@@ -250,18 +258,39 @@
     }
   });
 
-  // ডেটা লোড ফাংশন (Cache Check)
+  // ডেটা লোড ফাংশন (Cache Check with Loading Labels)
   function loadData() {
-    const cachedData = localStorage.getItem(CACHE_KEY);
-    const cacheTime = localStorage.getItem(CACHE_TIME_KEY);
-    const now = new Date().getTime();
+    const statusEl = document.getElementById('status-message');
+    statusEl.style.display = 'inline-block';
 
-    if (cachedData && cacheTime && (now - cacheTime < ONE_DAY_MS)) {
-      allMovies = JSON.parse(cachedData);
-      filteredMovies = [...allMovies];
-      renderPlaceholders();
-      document.getElementById('status-message').style.display = 'none';
-    } else {
+    try {
+      const cachedData = localStorage.getItem(CACHE_KEY);
+      const cacheTime = localStorage.getItem(CACHE_TIME_KEY);
+      const now = new Date().getTime();
+
+      if (cachedData && cacheTime && (now - cacheTime < ONE_DAY_MS)) {
+        // লোকাল স্টোরেজ থেকে লোড হচ্ছে
+        statusEl.innerText = "Loading from Local Storage...";
+        console.log("✅ Local Storage থেকে ডেটা লোড হচ্ছে...");
+        
+        allMovies = JSON.parse(cachedData);
+        filteredMovies = [...allMovies];
+        
+        // লেবেলটা যাতে একটু সময় স্ক্রিনে দেখা যায়, তাই 500ms এর একটা ছোট ডিলে দেওয়া হয়েছে
+        setTimeout(() => {
+          renderPlaceholders();
+          statusEl.style.display = 'none';
+        }, 500);
+
+      } else {
+        // গুগল শিট থেকে লোড হচ্ছে
+        statusEl.innerText = "Google Sheet Fetching...";
+        console.log("🌐 Local Storage খালি বা ডেটা পুরনো। Google Sheets থেকে নতুন ডেটা আনা হচ্ছে...");
+        fetchDataFromSheet();
+      }
+    } catch (error) {
+      statusEl.innerText = "Google Sheet Fetching...";
+      console.warn("⚠️ Local Storage অ্যাক্সেস করতে সমস্যা হচ্ছে।", error);
       fetchDataFromSheet();
     }
   }
@@ -295,15 +324,23 @@
           }
         }
         
-        localStorage.setItem(CACHE_KEY, JSON.stringify(fetchedMovies));
-        localStorage.setItem(CACHE_TIME_KEY, new Date().getTime().toString());
+        // ডেটা সেভ করার চেষ্টা
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify(fetchedMovies));
+          localStorage.setItem(CACHE_TIME_KEY, new Date().getTime().toString());
+        } catch (storageError) {
+          console.warn("⚠️ Local Storage-এ ডেটা সেভ করা গেল না।", storageError);
+        }
 
         allMovies = fetchedMovies;
         filteredMovies = [...allMovies];
         renderPlaceholders();
+        
+        // ডেটা চলে আসলে লেবেল হাইড করা
         document.getElementById('status-message').style.display = 'none';
       })
       .catch(err => {
+        console.error("❌ ডেটা লোড করতে সমস্যা:", err);
         document.getElementById('status-message').innerText = "ডেটা লোড করতে সমস্যা হয়েছে!";
       });
   }
