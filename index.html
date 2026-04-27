@@ -3,21 +3,21 @@
   :root {
     --bg-color-1: #ff4b4b; 
     --bg-color-2: #4b4bff; 
-    --card-bg: #ffffff;
-    --text-color: #333333;
+    --card-bg: rgba(255, 255, 255, 0.85);
+    --text-color: #222222;
     --btn-text: #ffffff;
   }
   
   body.dark-mode {
     --bg-color-1: #4a0000;
     --bg-color-2: #00004a;
-    --card-bg: #222222;
+    --card-bg: rgba(0, 0, 0, 0.75);
     --text-color: #f1f1f1;
   }
 
   body {
     margin: 0;
-    padding: 20px;
+    padding: 15px; 
     font-family: sans-serif;
     color: var(--text-color);
     background: linear-gradient(45deg, var(--bg-color-1), var(--bg-color-2));
@@ -32,20 +32,20 @@
     100% { background-position: 0% 50%; }
   }
 
-  /* টপ বার (সার্চ এবং ডার্ক মোড টগল সুইচ) */
+  /* টপ বার */
   .top-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 15px;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 10px 20px;
-    border-radius: 12px;
-    backdrop-filter: blur(5px);
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
   }
   
   #searchBox {
@@ -56,23 +56,22 @@
     font-size: 16px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     outline: none;
+    width: 100%;
   }
 
-  /* টগল সুইচ ডিজাইন */
+  /* টগল সুইচ */
   .toggle-container {
     display: flex;
     align-items: center;
-    gap: 10px;
-    color: white;
-    font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    gap: 8px;
+    font-size: 22px;
   }
 
   .switch {
     position: relative;
     display: inline-block;
-    width: 50px;
-    height: 28px;
+    width: 48px;
+    height: 26px;
   }
   .switch input { opacity: 0; width: 0; height: 0; }
   .slider {
@@ -87,8 +86,8 @@
   .slider:before {
     position: absolute;
     content: "";
-    height: 20px;
-    width: 20px;
+    height: 18px;
+    width: 18px;
     left: 4px;
     bottom: 4px;
     background-color: white;
@@ -102,25 +101,29 @@
   .movie-container {
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    max-width: 600px; /* সিঙ্গেল কলামের জন্য পারফেক্ট সাইজ */
+    gap: 25px;
+    max-width: 600px; 
     margin: 0 auto;
   }
 
-  /* ভার্চুয়াল প্লেসহোল্ডার (এর ভেতরে কার্ড লোড হবে এবং ডিলিট হবে) */
+  /* ভার্চুয়াল প্লেসহোল্ডার (উচ্চতা ইউটিউব থাম্বনেইলের অনুপাতে কমানো হয়েছে) */
   .card-placeholder {
-    min-height: 550px; /* কার্ডের আনুমানিক উচ্চতা যাতে স্ক্রল স্মুথ থাকে */
+    min-height: 400px; 
     width: 100%;
   }
 
+  /* কার্ড ডিজাইন */
   .movie-card {
     background: var(--card-bg);
-    border-radius: 12px;
+    border-radius: 20px; 
     padding: 20px;
     cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     transition: transform 0.2s ease;
-    opacity: 0; /* অ্যানিমেশনের জন্য */
+    opacity: 0; 
   }
   
   .movie-card:hover { transform: scale(1.02); }
@@ -138,42 +141,46 @@
     to { transform: translateX(0); opacity: 1; }
   }
 
+  /* ইমেজের সাইজ ইউটিউব থাম্বনেইলের মতো (16:9) এবং স্ট্রেচ (fill) */
   .movie-poster {
     width: 100%;
-    height: 400px;
-    object-fit: cover;
-    border-radius: 8px;
+    aspect-ratio: 16 / 9; /* ইউটিউব থাম্বনেইল রেশিও */
+    object-fit: fill; /* ইমেজ জোর করে ফিট হবে */
+    border-radius: 12px;
     background: #e0e0e0;
   }
 
   .movie-title {
-    font-size: 1.5em;
+    font-size: 1.4em;
     margin: 15px 0;
     text-align: center;
-    font-weight: bold;
-    line-height: 1.2;
+    font-weight: 800;
+    line-height: 1.3;
   }
 
-  /* বাটনগুলো সাইড-বাই-সাইড */
+  /* বাটনগুলো */
   .movie-buttons {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    gap: 10px;
+    gap: 12px;
+    margin-top: 10px;
   }
   
   .movie-buttons a {
     flex: 1;
     text-align: center;
-    padding: 12px 5px;
-    border-radius: 8px;
+    padding: 14px 8px; 
+    border-radius: 10px;
     color: var(--btn-text);
     text-decoration: none;
     font-weight: bold;
-    transition: opacity 0.2s;
-    font-size: 14px;
+    font-size: 16px; 
+    transition: opacity 0.2s, transform 0.1s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   }
   
+  .movie-buttons a:active { transform: scale(0.95); }
   .movie-buttons a:hover { opacity: 0.8; }
   .btn-preview { background-color: #ff9800; }
   .btn-watch { background-color: #e50914; }
@@ -185,6 +192,11 @@
     font-weight: bold;
     font-size: 18px;
     margin-top: 20px;
+  }
+
+  @media (max-width: 380px) {
+    .movie-buttons { gap: 8px; }
+    .movie-buttons a { font-size: 14px; padding: 12px 4px; }
   }
 </style>
 
@@ -206,11 +218,15 @@
   const sheetId = '1XKI9EmngzuXG29RDT4KuyuB2oNi6Nob3GNFfERYS3Wk';
   const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
 
+  const CACHE_KEY = 'jasTvMovieData';
+  const CACHE_TIME_KEY = 'jasTvCacheTime';
+  const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
   let allMovies = [];
   let filteredMovies = [];
   let lastScrollY = window.scrollY;
 
-  // ডার্ক মোড টগল লজিক
+  // ডার্ক মোড টগল 
   const darkModeToggle = document.getElementById('darkModeToggle');
   darkModeToggle.addEventListener('change', (e) => {
     if(e.target.checked) {
@@ -220,39 +236,67 @@
     }
   });
 
-  // গুগল শিট থেকে ডেটা আনা
-  fetch(url)
-    .then(res => res.text())
-    .then(text => {
-      const json = JSON.parse(text.substring(47).slice(0, -2));
-      const rows = json.table.rows;
-      
-      for (let i = 1; i < rows.length; i++) {
-        const row = rows[i].c;
-        if (row && row[0] && row[0].v) {
-          
-          let rawTitle = row[0].v;
-          // স্পেশাল ক্যারেক্টার রিমুভ করে স্পেস বসানো
-          let cleanTitle = rawTitle.replace(/[^a-zA-Z0-9\u0980-\u09FF]/g, ' ').replace(/\s+/g, ' ').trim();
+  // ডেটা লোড ফাংশন (Cache Check)
+  function loadData() {
+    const cachedData = localStorage.getItem(CACHE_KEY);
+    const cacheTime = localStorage.getItem(CACHE_TIME_KEY);
+    const now = new Date().getTime();
 
-          allMovies.push({
-            title: cleanTitle,
-            poster: row[1] ? row[1].v : '',
-            preview: row[2] ? row[2].v : '',
-            download: row[3] ? row[3].v : '',
-            watch: row[4] ? row[4].v : ''
-          });
-        }
-      }
+    if (cachedData && cacheTime && (now - cacheTime < ONE_DAY_MS)) {
+      allMovies = JSON.parse(cachedData);
       filteredMovies = [...allMovies];
       renderPlaceholders();
       document.getElementById('status-message').style.display = 'none';
-    })
-    .catch(err => {
-      document.getElementById('status-message').innerText = "ডেটা লোড করতে সমস্যা হয়েছে!";
-    });
+    } else {
+      fetchDataFromSheet();
+    }
+  }
 
-  // কার্ডের এইচটিএমএল স্ট্রাকচার তৈরির ফাংশন
+  // গুগল শিট থেকে ডেটা আনা
+  function fetchDataFromSheet() {
+    fetch(url)
+      .then(res => res.text())
+      .then(text => {
+        const json = JSON.parse(text.substring(47).slice(0, -2));
+        const rows = json.table.rows;
+        let fetchedMovies = [];
+        
+        for (let i = 1; i < rows.length; i++) {
+          const row = rows[i].c;
+          if (row && row[0] && row[0].v) {
+            
+            let rawTitle = row[0].v;
+            
+            let cleanTitle = rawTitle.replace(/\b(mp4|1080p|720p|24fps|mkv)\b/gi, ' ');
+            cleanTitle = cleanTitle.replace(/[^a-zA-Z0-9\u0980-\u09FF]/g, ' ');
+            cleanTitle = cleanTitle.replace(/\s+/g, ' ').trim();
+
+            fetchedMovies.push({
+              title: cleanTitle,
+              poster: row[1] ? row[1].v : '',
+              preview: row[2] ? row[2].v : '',
+              download: row[3] ? row[3].v : '',
+              watch: row[4] ? row[4].v : ''
+            });
+          }
+        }
+        
+        localStorage.setItem(CACHE_KEY, JSON.stringify(fetchedMovies));
+        localStorage.setItem(CACHE_TIME_KEY, new Date().getTime().toString());
+
+        allMovies = fetchedMovies;
+        filteredMovies = [...allMovies];
+        renderPlaceholders();
+        document.getElementById('status-message').style.display = 'none';
+      })
+      .catch(err => {
+        document.getElementById('status-message').innerText = "ডেটা লোড করতে সমস্যা হয়েছে!";
+      });
+  }
+
+  loadData();
+
+  // কার্ড এইচটিএমএল
   function getCardHTML(movie) {
     return `
       <div class="movie-card" onclick="if('${movie.watch}') window.open('${movie.watch}', '_blank');">
@@ -267,7 +311,7 @@
     `;
   }
 
-  // DOM Virtualization & Animation Observer
+  // DOM Virtualization 
   const scrollObserver = new IntersectionObserver((entries) => {
     const currentScrollY = window.scrollY;
     const scrollingDown = currentScrollY > lastScrollY;
@@ -275,13 +319,11 @@
     entries.forEach(entry => {
       const index = entry.target.dataset.index;
       
-      // যখন কার্ড স্ক্রিনে আসছে (অথবা স্ক্রিনের খুব কাছাকাছি)
       if (entry.isIntersecting) {
         if (entry.target.innerHTML === '') {
           entry.target.innerHTML = getCardHTML(filteredMovies[index]);
           const cardElement = entry.target.querySelector('.movie-card');
           
-          // অ্যানিমেশন সেট করা
           if (scrollingDown) {
             cardElement.classList.add('slide-from-left');
           } else {
@@ -289,10 +331,8 @@
           }
         }
       } 
-      // যখন কার্ড স্ক্রিন থেকে অনেক দূরে চলে যাচ্ছে (Memory Save করার জন্য ডিলিট)
       else {
         if (entry.target.innerHTML !== '') {
-           // ভেতরের HTML মুছে দেওয়া হলো, কিন্তু বাইরের div এর height বজায় থাকবে
           entry.target.innerHTML = ''; 
         }
       }
@@ -300,14 +340,12 @@
     
     lastScrollY = currentScrollY;
   }, { 
-    // স্ক্রিনের ৪০০ পিক্সেল ওপর বা নিচ পর্যন্ত কার্ডগুলো রেন্ডার হয়ে থাকবে
     rootMargin: '400px 0px 400px 0px' 
   });
 
-  // সার্চ বা ডেটা লোড হলে প্লেসহোল্ডার তৈরি করা
   function renderPlaceholders() {
     const container = document.getElementById('movie-container');
-    container.innerHTML = ''; // আগের সব মুছে ফেলা
+    container.innerHTML = ''; 
     
     if(filteredMovies.length === 0) {
        container.innerHTML = '<h3 style="color:white; text-align:center;">কোনো মুভি পাওয়া যায়নি</h3>';
@@ -317,15 +355,13 @@
     filteredMovies.forEach((movie, index) => {
       const placeholder = document.createElement('div');
       placeholder.className = 'card-placeholder';
-      placeholder.dataset.index = index; // ইনডেক্স সেভ করে রাখা
+      placeholder.dataset.index = index;
       container.appendChild(placeholder);
       
-      // অবজাভার চালু করা
       scrollObserver.observe(placeholder);
     });
   }
 
-  // লাইভ সার্চ ফাংশন
   document.getElementById('searchBox').addEventListener('input', (e) => {
     const term = e.target.value.toLowerCase();
     filteredMovies = allMovies.filter(m => m.title.toLowerCase().includes(term));
