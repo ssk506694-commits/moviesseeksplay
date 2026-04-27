@@ -17,13 +17,14 @@
 
   body {
     margin: 0;
-    padding: 15px; 
+    padding: 15px 8px; /* দুপাশের ফাঁকা জায়গা কমানোর জন্য প্যাডিং কমানো হয়েছে */
     font-family: sans-serif;
     color: var(--text-color);
     background: linear-gradient(45deg, var(--bg-color-1), var(--bg-color-2));
     background-size: 200% 200%;
     animation: gradientMove 5s ease infinite;
     min-height: 100vh;
+    box-sizing: border-box;
   }
 
   @keyframes gradientMove {
@@ -39,13 +40,15 @@
     align-items: center;
     gap: 15px;
     margin-bottom: 25px;
-    max-width: 600px;
+    max-width: 800px; /* চওড়া বাড়ানো হয়েছে */
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
     background: rgba(255, 255, 255, 0.2);
     padding: 15px;
     border-radius: 15px;
     backdrop-filter: blur(10px);
+    box-sizing: border-box;
   }
   
   #searchBox {
@@ -102,11 +105,13 @@
     display: flex;
     flex-direction: column;
     gap: 25px;
-    max-width: 600px; 
+    max-width: 800px; /* কার্ডের চওড়া বাড়ানো হয়েছে যাতে স্ক্রিন ফিল হয় */
+    width: 100%;
     margin: 0 auto;
+    box-sizing: border-box;
   }
 
-  /* ভার্চুয়াল প্লেসহোল্ডার (উচ্চতা ইউটিউব থাম্বনেইলের অনুপাতে কমানো হয়েছে) */
+  /* ভার্চুয়াল প্লেসহোল্ডার */
   .card-placeholder {
     min-height: 400px; 
     width: 100%;
@@ -115,7 +120,7 @@
   /* কার্ড ডিজাইন */
   .movie-card {
     background: var(--card-bg);
-    border-radius: 20px; 
+    border-radius: 20px; /* কোণাগুলো গোল রাখা হয়েছে */
     padding: 20px;
     cursor: pointer;
     box-shadow: 0 8px 32px rgba(0,0,0,0.2);
@@ -124,6 +129,8 @@
     border: 1px solid rgba(255, 255, 255, 0.18);
     transition: transform 0.2s ease;
     opacity: 0; 
+    width: 100%;
+    box-sizing: border-box;
   }
   
   .movie-card:hover { transform: scale(1.02); }
@@ -144,8 +151,8 @@
   /* ইমেজের সাইজ ইউটিউব থাম্বনেইলের মতো (16:9) এবং স্ট্রেচ (fill) */
   .movie-poster {
     width: 100%;
-    aspect-ratio: 16 / 9; /* ইউটিউব থাম্বনেইল রেশিও */
-    object-fit: fill; /* ইমেজ জোর করে ফিট হবে */
+    aspect-ratio: 16 / 9; 
+    object-fit: fill; 
     border-radius: 12px;
     background: #e0e0e0;
   }
@@ -197,11 +204,12 @@
   @media (max-width: 380px) {
     .movie-buttons { gap: 8px; }
     .movie-buttons a { font-size: 14px; padding: 12px 4px; }
+    body { padding: 10px 5px; } /* ছোট স্ক্রিনে ফাঁকা জায়গা আরও কমানো হয়েছে */
   }
 </style>
 
 <div class="top-bar">
-  <input type="text" id="searchBox" placeholder="মুভি খুঁজুন...">
+  <input type="text" id="searchBox" placeholder="Search Movies...">
   <div class="toggle-container">
     <span>🌙</span>
     <label class="switch">
