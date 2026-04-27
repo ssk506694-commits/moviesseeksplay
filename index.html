@@ -17,7 +17,7 @@
 
   body {
     margin: 0;
-    padding: 15px 8px; /* দুপাশের ফাঁকা জায়গা কমানোর জন্য প্যাডিং কমানো হয়েছে */
+    padding: 15px 8px; 
     font-family: sans-serif;
     color: var(--text-color);
     background: linear-gradient(45deg, var(--bg-color-1), var(--bg-color-2));
@@ -40,7 +40,7 @@
     align-items: center;
     gap: 15px;
     margin-bottom: 25px;
-    max-width: 800px; /* চওড়া বাড়ানো হয়েছে */
+    max-width: 800px; 
     width: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -51,30 +51,32 @@
     box-sizing: border-box;
   }
   
+  /* সার্চ বক্স বড় করা হয়েছে */
   #searchBox {
     flex-grow: 1;
-    padding: 12px;
-    border-radius: 8px;
+    padding: 16px; /* প্যাডিং বাড়ানো হয়েছে */
+    border-radius: 10px;
     border: none;
-    font-size: 16px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    font-size: 18px; /* ফন্ট বড় করা হয়েছে */
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     outline: none;
     width: 100%;
   }
 
-  /* টগল সুইচ */
+  /* টগল সুইচ একটু বড় করা হয়েছে */
   .toggle-container {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 22px;
+    font-size: 24px;
   }
 
   .switch {
     position: relative;
     display: inline-block;
-    width: 48px;
-    height: 26px;
+    width: 56px;
+    height: 30px;
   }
   .switch input { opacity: 0; width: 0; height: 0; }
   .slider {
@@ -89,8 +91,8 @@
   .slider:before {
     position: absolute;
     content: "";
-    height: 18px;
-    width: 18px;
+    height: 22px;
+    width: 22px;
     left: 4px;
     bottom: 4px;
     background-color: white;
@@ -98,14 +100,14 @@
     border-radius: 50%;
   }
   input:checked + .slider { background-color: #2196F3; }
-  input:checked + .slider:before { transform: translateX(22px); }
+  input:checked + .slider:before { transform: translateX(26px); }
 
   /* মুভি কন্টেইনার */
   .movie-container {
     display: flex;
     flex-direction: column;
     gap: 25px;
-    max-width: 800px; /* কার্ডের চওড়া বাড়ানো হয়েছে যাতে স্ক্রিন ফিল হয় */
+    max-width: 800px; 
     width: 100%;
     margin: 0 auto;
     box-sizing: border-box;
@@ -113,14 +115,14 @@
 
   /* ভার্চুয়াল প্লেসহোল্ডার */
   .card-placeholder {
-    min-height: 400px; 
+    min-height: 450px; 
     width: 100%;
   }
 
   /* কার্ড ডিজাইন */
   .movie-card {
     background: var(--card-bg);
-    border-radius: 20px; /* কোণাগুলো গোল রাখা হয়েছে */
+    border-radius: 20px; 
     padding: 20px;
     cursor: pointer;
     box-shadow: 0 8px 32px rgba(0,0,0,0.2);
@@ -157,15 +159,16 @@
     background: #e0e0e0;
   }
 
+  /* টাইটেল বড় করা হয়েছে */
   .movie-title {
-    font-size: 1.4em;
-    margin: 15px 0;
+    font-size: 1.7em; /* ফন্ট আরও বড় করা হয়েছে */
+    margin: 18px 0;
     text-align: center;
     font-weight: 800;
     line-height: 1.3;
   }
 
-  /* বাটনগুলো */
+  /* বাটনগুলো বড় করা হয়েছে */
   .movie-buttons {
     display: flex;
     flex-direction: row;
@@ -177,14 +180,14 @@
   .movie-buttons a {
     flex: 1;
     text-align: center;
-    padding: 14px 8px; 
-    border-radius: 10px;
+    padding: 16px 8px; /* বাটন প্যাডিং বাড়ানো হয়েছে */
+    border-radius: 12px;
     color: var(--btn-text);
     text-decoration: none;
     font-weight: bold;
-    font-size: 16px; 
+    font-size: 18px; /* বাটন ফন্ট বড় করা হয়েছে */
     transition: opacity 0.2s, transform 0.1s;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   }
   
   .movie-buttons a:active { transform: scale(0.95); }
@@ -197,14 +200,17 @@
     text-align: center;
     color: white;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
     margin-top: 20px;
   }
 
+  /* ছোট স্ক্রিনের জন্য ফন্ট যেন খুব ছোট না হয় তার ব্যবস্থা */
   @media (max-width: 380px) {
-    .movie-buttons { gap: 8px; }
-    .movie-buttons a { font-size: 14px; padding: 12px 4px; }
-    body { padding: 10px 5px; } /* ছোট স্ক্রিনে ফাঁকা জায়গা আরও কমানো হয়েছে */
+    .movie-buttons { gap: 10px; }
+    .movie-buttons a { font-size: 16px; padding: 14px 4px; }
+    #searchBox { font-size: 16px; padding: 14px; }
+    .movie-title { font-size: 1.5em; }
+    body { padding: 10px 5px; } 
   }
 </style>
 
