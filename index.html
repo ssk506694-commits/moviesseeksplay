@@ -1,1 +1,82 @@
-<div id="dynamic-content"><p>কোড লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...</p></div><script>const sheetId='1NfMriwtQSus8ECG8VTOTvZXyTjWKVmtZmZzyiVhHHb8',url=https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json,cacheKey='my_blogger_unique_cache_data_v1',dateKey='my_blogger_last_fetch_date';function renderCode(e){const t=document.getElementById("dynamic-content");t.innerHTML=e,t.querySelectorAll("script").forEach(e=>{const t=document.createElement("script");Array.from(e.attributes).forEach(e=>t.setAttribute(e.name,e.value)),e.innerHTML&&(t.innerHTML=e.innerHTML),e.parentNode.replaceChild(t,e)})}function fallbackToCache(e){const t=localStorage.getItem(cacheKey);t?(console.log("Fallback to cache"),renderCode(t)):document.getElementById("dynamic-content").innerHTML=e}function fetchFromSheetAndCache(){fetch(url).then(e=>e.text()).then(e=>{const t=JSON.parse(e.match(/google\.visualization\.Query\.setResponse\(([\s\S\w]+)\)/)[1]);if(t.table.rows[0]&&t.table.rows[0].c[0]){const e=t.table.rows[0].c[0].v;localStorage.setItem(cacheKey,e),localStorage.setItem(dateKey,new Date().toDateString()),renderCode(e)}else fallbackToCache("<p>শিটে কোনো কোড পাওয়া যায়নি!</p>")}).catch(e=>{console.error(e),fallbackToCache("<p>লোড করতে ব্যর্থ হয়েছে।</p>")})}const todayDate=new Date().toDateString(),lastFetchDate=localStorage.getItem(dateKey);lastFetchDate===todayDate?(()=>{const e=localStorage.getItem(cacheKey);e?renderCode(e):fetchFromSheetAndCache()})():fetchFromSheetAndCache();</script>
+<div id="dynamic-content">
+  <p>কোড লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...</p>
+</div>
+<script>
+  // আপনার গুগল শিটের আইডি
+  const sheetId = '1NfMriwtQSus8ECG8VTOTvZXyTjWKVmtZmZzyiVhHHb8';
+  const url = https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json;
+  // ওভারল্যাপিং এড়াতে লোকাল স্টোরেজের জন্য ইউনিক নাম (Key)
+  const cacheKey = 'my_blogger_unique_cache_data_v1';
+  const dateKey = 'my_blogger_last_fetch_date';
+  // HTML এবং Script রান করানোর ফাংশন
+  function renderCode(htmlContent) {
+    const container = document.getElementById('dynamic-content');
+    container.innerHTML = htmlContent;
+    // HTML এর ভেতর থেকে সমস্ত script ট্যাগ খুঁজে বের করে রান করানো
+    const scripts = container.querySelectorAll('script');
+    scripts.forEach(oldScript => {
+      const newScript = document.createElement('script');
+      Array.from(oldScript.attributes).forEach(attr => {
+        newScript.setAttribute(attr.name, attr.value);
+      });
+      if (oldScript.innerHTML) {
+        newScript.innerHTML = oldScript.innerHTML;
+      }
+      oldScript.parentNode.replaceChild(newScript, oldScript);
+    });
+  }
+  // শিট থেকে ডেটা আনতে ব্যর্থ হলে পুরনো ডেটা দেখানোর ফাংশন
+  function fallbackToCache(errorMessage) {
+    const cachedData = localStorage.getItem(cacheKey);
+    if (cachedData) {
+      console.log('Fetching failed. Loading previous data from LocalStorage.');
+      renderCode(cachedData);
+    } else {
+      document.getElementById('dynamic-content').innerHTML = errorMessage;
+    }
+  }
+  // গুগল শিট থেকে নতুন ডেটা ফেচ করার ফাংশন
+  function fetchFromSheetAndCache() {
+    fetch(url)
+      .then(response => response.text())
+      .then(text => {
+        const jsonString = text.match(/google\.visualization\.Query\.setResponse\(([\s\S\w]+)\)/)[1];
+        const data = JSON.parse(jsonString);
+        
+        if (data.table.rows[0] && data.table.rows[0].c[0]) {
+          const htmlCode = data.table.rows[0].c[0].v;
+          
+          // নতুন ডেটা লোকাল স্টোরেজে সেভ করা এবং আজকের তারিখ আপডেট করা
+          localStorage.setItem(cacheKey, htmlCode);
+          localStorage.setItem(dateKey, new Date().toDateString());
+          
+          // কোড রান করানো
+          renderCode(htmlCode);
+        } else {
+          fallbackToCache('<p>শিটে কোনো কোড পাওয়া যায়নি!</p>');
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching sheet data:', error);
+        fallbackToCache('<p>ইন্টারনেট বা শিটের সমস্যার কারণে কোড লোড করতে ব্যর্থ হয়েছে।</p>');
+      });
+  }
+  // মেইন লজিক: চেক করা যে আজ ডেটা ফেচ হয়েছে কিনা
+  const todayDate = new Date().toDateString();
+  const lastFetchDate = localStorage.getItem(dateKey);
+  if (lastFetchDate === todayDate) {
+    // আজ অলরেডি ফেচ হয়েছে, তাই লোকাল স্টোরেজ থেকে ডেটা নেবো
+    const cachedData = localStorage.getItem(cacheKey);
+    if (cachedData) {
+      console.log('Loading data from LocalStorage (Already fetched today).');
+      renderCode(cachedData);
+    } else {
+      // কোনো কারণে তারিখ আছে কিন্তু ডেটা ডিলিট হয়ে গেছে, তখন আবার ফেচ করবে
+      fetchFromSheetAndCache();
+    }
+  } else {
+    // আজ এখনো ফেচ হয়নি, তাই গুগল শিট থেকে ফেচ করবে
+    console.log('Fetching new data from Google Sheet...');
+    fetchFromSheetAndCache();
+  }
+</script>
