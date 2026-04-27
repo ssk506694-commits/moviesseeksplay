@@ -1,39 +1,78 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading...</title>
-    <style>
-        body { background: #1a1a1a; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; }
-        #loader { font-size: 20px; font-weight: bold; padding: 15px 30px; background: rgba(255,255,255,0.1); border-radius: 10px; }
-    </style>
-</head>
-<body>
+<div id="dynamic-content">
+  <p>কোড লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...</p>
+</div>
 
-    <div id="loader">Loading...</div>
+<script>
+  // আপনার গুগল শিটের আইডি
+  const sheetId = '1NfMriwtQSus8ECG8VTOTvZXyTjWKVmtZmZzyiVhHHb8';
+  // এখানে ব্যাকটিক () ব্যবহার করা হয়েছে URL এর জন্য
+  const url = https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+  
+  const cacheKey = 'my_blogger_unique_cache_data_v1';
+  const dateKey = 'my_blogger_last_fetch_date';
 
-    <script>
-        const url = 'https://docs.google.com/spreadsheets/d/1NfMriwtQSus8ECG8VTOTvZXyTjWKVmtZmZzyiVhHHb8/gviz/tq?tqx=out:json&range=A1';
-        
-        fetch(url)
-            .then(res => res.text())
-            .then(text => {
-                const json = JSON.parse(text.substring(47).slice(0, -2));
-                const code = json.table.rows[0]?.c[0]?.v;
-                
-                if (code) {
-                    document.open();
-                    document.write(code);
-                    document.close();
-                } else {
-                    document.getElementById('loader').innerText = "Error: Sheet is empty!";
-                }
-            })
-            .catch(() => {
-                document.getElementById('loader').innerText = "Error fetching data! Check internet.";
-            });
-    </script>
+  function renderCode(htmlContent) {
+    const container = document.getElementById('dynamic-content');
+    container.innerHTML = htmlContent;
+    
+    const scripts = container.querySelectorAll('script');
+    scripts.forEach(oldScript => {
+      const newScript = document.createElement('script');
+      Array.from(oldScript.attributes).forEach(attr => {
+        newScript.setAttribute(attr.name, attr.value);
+      });
+      if (oldScript.innerHTML) {
+        newScript.innerHTML = oldScript.innerHTML;
+      }
+      oldScript.parentNode.replaceChild(newScript, oldScript);
+    });
+  }
 
-</body>
-</html>
+  function fallbackToCache(errorMessage) {
+    const cachedData = localStorage.getItem(cacheKey);
+    if (cachedData) {
+      console.log('Loading from cache...');
+      renderCode(cachedData);
+    } else {
+      document.getElementById('dynamic-content').innerHTML = errorMessage;
+    }
+  }
+
+  function fetchFromSheetAndCache() {
+    fetch(url)
+      .then(response => response.text())
+      .then(text => {
+        // রেসপন্স থেকে JSON অংশটুকু বের করা
+        const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S\w]+)\)/);
+        if (match && match[1]) {
+          const data = JSON.parse(match[1]);
+          if (data.table.rows[0] && data.table.rows[0].c[0]) {
+            const htmlCode = data.table.rows[0].c[0].v;
+            localStorage.setItem(cacheKey, htmlCode);
+            localStorage.setItem(dateKey, new Date().toDateString());
+            renderCode(htmlCode);
+          } else {
+            fallbackToCache('<p>শিটে কোনো কোড পাওয়া যায়নি!</p>');
+          }
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        fallbackToCache('<p>কোড লোড করতে ব্যর্থ হয়েছে।</p>');
+      });
+  }
+
+  const todayDate = new Date().toDateString();
+  const lastFetchDate = localStorage.getItem(dateKey);
+
+  if (lastFetchDate === todayDate) {
+    const cachedData = localStorage.getItem(cacheKey);
+    if (cachedData) {
+      renderCode(cachedData);
+    } else {
+      fetchFromSheetAndCache();
+    }
+  } else {
+    fetchFromSheetAndCache();
+  }
+</script>
